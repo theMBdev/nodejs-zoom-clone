@@ -1,4 +1,4 @@
-const { json } = require("express");
+// const { json } = require("express");
 
 const socket = io()
 const videoGrid = document.getElementById('video-grid');
@@ -18,8 +18,6 @@ function checkSafari() {
     peerOptions.serialization = "json";
   }
 // conn = peer.connect('ABCDEFG', peerOptions);
-
-
 
 
 let myVideoStream;
@@ -78,6 +76,7 @@ myPeer.on('open', id => {
 function connectToNewUser(userId, stream) {
     const call = myPeer.call(userId, stream)
     const video = document.createElement('video')
+
     call.on('stream', userVideoStream => {
         peerOptions
         addVideoStream(video, userVideoStream)
@@ -91,6 +90,8 @@ function connectToNewUser(userId, stream) {
 
 function addVideoStream(video, stream) {
     video.srcObject = stream
+    video.autoplay = true;
+    video.setAttribute('playsinline', 'playsinline');
     video.addEventListener('loadedmetadata', () => {
         video.play()
     })
