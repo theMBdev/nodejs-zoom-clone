@@ -1,7 +1,26 @@
+const { json } = require("express");
+
 const socket = io()
 const videoGrid = document.getElementById('video-grid');
 //NOTE: removing settings from peer constructor solved join-room event not emitting!
 const myPeer = new Peer();
+
+
+function checkSafari() {
+    let seemsChrome = navigator.userAgent.indexOf("Chrome") > -1;
+    let seemsSafari = navigator.userAgent.indexOf("Safari") > -1;
+    return seemsSafari && !seemsChrome;
+  }
+
+  let peerOptions = {};
+
+  if (checkSafari()) {
+    peerOptions.serialization = "json";
+  }
+// conn = peer.connect('ABCDEFG', peerOptions);
+
+
+
 
 let myVideoStream;
 const myVideo = document.createElement('video')
@@ -14,6 +33,7 @@ navigator.mediaDevices.getUserMedia({
     myVideoStream = stream;
     addVideoStream(myVideo, stream)
     myPeer.on('call', call => {
+        peerOptions
         call.answer(stream)
         const video = document.createElement('video')
         call.on('stream', userVideoStream => {
@@ -21,7 +41,9 @@ navigator.mediaDevices.getUserMedia({
         })
     })
 
+
     socket.on('user-connected', userId => {
+            peerOptions
             alert("New user!");
             connectToNewUser(userId, stream)
         })
@@ -37,23 +59,27 @@ navigator.mediaDevices.getUserMedia({
         }
     });
     socket.on("createMessage", message => {
+        peerOptions
         $("ul").append(`<li class="message"><b>user</b><br/>${message}</li>`);
         scrollToBottom()
     })
 })
 
 socket.on('user-disconnected', userId => {
+    peerOptions
     if (peers[userId]) peers[userId].close()
 })
 
 myPeer.on('open', id => {
-    socket.emit('join-room', ROOM_ID, id)
+    peerOptions
+    socket.emit('join-room', ROOM_ID, id, peerOptions)
 })
 
 function connectToNewUser(userId, stream) {
     const call = myPeer.call(userId, stream)
     const video = document.createElement('video')
     call.on('stream', userVideoStream => {
+        peerOptions
         addVideoStream(video, userVideoStream)
     })
     call.on('close', () => {
@@ -101,6 +127,11 @@ const playStop = () => {
         myVideoStream.getVideoTracks()[0].enabled = true;
     }
 }
+
+
+
+
+
 
 const setMuteButton = () => {
     const html = `
