@@ -37,7 +37,6 @@ app.get('/:room', (req, res) => {
 
 const sendToAllRoom = (room, emit, message) => {
     console.log("UL STAR", USER_LIST)
-    console.log("UL STAR ", USER_LIST)
     for (let i in USER_LIST) {
         if (USER_LIST[i].room == room) {
             USER_LIST[i].socket.emit(emit, message);
@@ -48,7 +47,7 @@ const sendToAllRoom = (room, emit, message) => {
 io.on('connection', socket => {
     //DEBUG: JOIN-ROOM NOT BEING SENT
     //FIXED: JOIN-ROOM SENT CREATED HELPER FUNCTION ABOVE CALLED SENDTOALLROOM
-    console.log("IO con")
+    console.log("IO con", roomId, userId)
     socket.on('join-room', (roomId, userId) => {
         socket.id = userId;
         socket.room = roomId;
