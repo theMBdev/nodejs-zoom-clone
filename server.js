@@ -5,13 +5,6 @@ const app = express()
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
 
-server = app.listen();
-
-server.on('clientError', (err, socket) => {
-  console.error(err);
-  socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
-});
-
 const { ExpressPeerServer } = require('peer');
 const peerServer = ExpressPeerServer(server, {
     debug: true
