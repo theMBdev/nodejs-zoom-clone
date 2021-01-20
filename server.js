@@ -47,8 +47,9 @@ const sendToAllRoom = (room, emit, message) => {
 io.on('connection', socket => {
     //DEBUG: JOIN-ROOM NOT BEING SENT
     //FIXED: JOIN-ROOM SENT CREATED HELPER FUNCTION ABOVE CALLED SENDTOALLROOM
-    console.log("IO con", roomId, userId)
+    // console.log("IO con", roomId, userId)
     socket.on('join-room', (roomId, userId) => {
+        console.log("IO con", roomId, userId)
         socket.id = userId;
         socket.room = roomId;
         socket.join(roomId)
