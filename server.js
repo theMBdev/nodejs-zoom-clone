@@ -44,39 +44,39 @@ const sendToAllRoom = (room, emit, message) => {
     }
 }
 
-// io.on('connection', socket => {
-//     //DEBUG: JOIN-ROOM NOT BEING SENT
-//     //FIXED: JOIN-ROOM SENT CREATED HELPER FUNCTION ABOVE CALLED SENDTOALLROOM
-//     // console.log("IO con", roomId, userId)
-//     socket.on('join-room', (roomId, userId) => {
-//         console.log("IO con", roomId, userId)
-//         socket.id = userId;
-//         socket.room = roomId;
-//         socket.join(roomId)
+io.on('connection', socket => {
+    //DEBUG: JOIN-ROOM NOT BEING SENT
+    //FIXED: JOIN-ROOM SENT CREATED HELPER FUNCTION ABOVE CALLED SENDTOALLROOM
+    // console.log("IO con", roomId, userId)
+    socket.on('join-room', (roomId, userId) => {
+        console.log("IO con", roomId, userId)
+        socket.id = userId;
+        socket.room = roomId;
+        socket.join(roomId)
 
-//         sendToAllRoom(roomId, 'user-connected', userId);
-//         console.log(`joined ${roomId}`);
+        sendToAllRoom(roomId, 'user-connected', userId);
+        console.log(`joined ${roomId}`);
 
-//         USER_LIST[socket.id] = new User({ name: `User_${USER_LIST.length}`, socket: socket });
-//     });
+        USER_LIST[socket.id] = new User({ name: `User_${USER_LIST.length}`, socket: socket });
+    });
 
-//     // messages
-//     socket.on('message', (message) => {
-//         console.log("socket.on message")
-//         console.log("socket.on message id", socket.id)
-//         console.log("socket.on message ul", USER_LIST[socket.id])
-//         console.log(message, USER_LIST[socket.id].room);
-//         //send message to the same room
-//         sendToAllRoom(USER_LIST[socket.id].room, "createMessage", message);
-//     });
+    // messages
+    socket.on('message', (message) => {
+        console.log("socket.on message")
+        console.log("socket.on message id", socket.id)
+        console.log("socket.on message ul", USER_LIST[socket.id])
+        console.log(message, USER_LIST[socket.id].room);
+        //send message to the same room
+        sendToAllRoom(USER_LIST[socket.id].room, "createMessage", message);
+    });
 
-//     socket.on('disconnect', () => {
-//         console.log("socket.on discon", socket.id)
-//         console.log("socket.on discon room", USER_LIST[socket.id].room)
-//         sendToAllRoom(USER_LIST[socket.id].room, "user-disconnected", socket.id);
-//         delete USER_LIST[socket.id];
-//     })
-// })
+    socket.on('disconnect', () => {
+        console.log("socket.on discon", socket.id)
+        console.log("socket.on discon room", USER_LIST[socket.id].room)
+        sendToAllRoom(USER_LIST[socket.id].room, "user-disconnected", socket.id);
+        delete USER_LIST[socket.id];
+    })
+})
 
 server.listen(process.env.PORT || 3030);
 console.log("server started");
