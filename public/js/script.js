@@ -95,7 +95,7 @@ function addVideoStream(video, stream) {
     video.addEventListener('loadedmetadata', () => {
         video.play()
     })
-    // videoGrid.append(video)
+    videoGrid.append(video)
 }
 
 
@@ -128,8 +128,6 @@ const playStop = () => {
         myVideoStream.getVideoTracks()[0].enabled = true;
     }
 }
-
-
 
 
 
