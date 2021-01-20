@@ -59,7 +59,7 @@ io.on('connection', socket => {
 
     // messages
     socket.on('message', (message) => {
-        console.log(message, USER_LIST[socket.id].room);
+        // console.log(message, USER_LIST[socket.id].room);
         //send message to the same room
         sendToAllRoom(USER_LIST[socket.id].room, "createMessage", message);
     });
